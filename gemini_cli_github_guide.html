@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini CLI를 이용한 GitHub 입문 가이드</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f8fa;
+            color: #24292e;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        h1, h2, h3 {
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: .3em;
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+        }
+        h3 {
+            font-size: 1.25em;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            padding: .2em .4em;
+            margin: 0;
+            font-size: 85%;
+            background-color: rgba(27,31,35,.05);
+            border-radius: 3px;
+        }
+        pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #24292e;
+            color: #f6f8fa;
+            border-radius: 6px;
+            word-wrap: normal;
+        }
+        pre code {
+            display: inline;
+            padding: 0;
+            margin: 0;
+            overflow: visible;
+            line-height: inherit;
+            word-wrap: normal;
+            background-color: transparent;
+            border: 0;
+            font-size: 100%;
+            color: inherit;
+        }
+        .note {
+            padding: 15px;
+            margin-bottom: 16px;
+            border-left: 4px solid #0366d6;
+            background-color: #f1f8ff;
+            border-radius: 4px;
+        }
+        .note p {
+            margin: 0;
+        }
+        .step {
+            margin-bottom: 1.5em;
+        }
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gemini CLI를 이용한 GitHub 입문 가이드</h1>
+        <p>이 가이드는 프로그래밍 초보자가 <strong>Git</strong>과 <strong>GitHub</strong>의 기본 개념을 이해하고, <strong>Gemini CLI</strong>를 사용하여 코드를 관리하는 방법을 배우는 것을 목표로 합니다.</p>
+
+        <h2>Part 1: GitHub 계정 만들기</h2>
+        <div class="step">
+            <p>코드를 세상과 공유하고 다른 개발자와 협업하기 위한 첫 단계입니다.</p>
+            <ol>
+                <li><a href="https://github.com/join" target="_blank">GitHub 가입 페이지</a>로 이동합니다.</li>
+                <li>원하는 사용자 이름, 이메일 주소, 비밀번호를 입력하고 화면의 안내에 따라 계정 생성을 완료합니다.</li>
+                <li>가입 시 입력한 이메일 주소로 인증 메일이 발송됩니다. 메일을 확인하여 인증을 완료해야 합니다.</li>
+            </ol>
+        </div>
+
+        <h2>Part 2: 로컬 개발 환경 설정하기</h2>
+        <div class="step">
+            <p>이제 내 컴퓨터에 프로젝트를 저장할 공간을 만들고 Git으로 관리를 시작하겠습니다. 모든 명령어는 Gemini CLI를 통해 실행합니다.</p>
+            
+            <h3>1. 프로젝트 폴더 생성</h3>
+            <p><code>my-first-repo</code>라는 이름의 폴더를 만듭니다.</p>
+            <pre><code>mkdir my-first-repo</code></pre>
+
+            <h3>2. Git 저장소 초기화</h3>
+            <p>방금 만든 폴더로 이동하여 Git이 이 폴더를 관리하도록 설정합니다. 이 과정을 '저장소(Repository) 초기화'라고 합니다.</p>
+            <pre><code>cd my-first-repo
+git init</code></pre>
+            <div class="note">
+                <p><strong>무슨 일이 일어났나요?</strong> <code>git init</code> 명령어는 폴더 내에 <code>.git</code>이라는 숨김 폴더를 만듭니다. 이 폴더에는 변경 이력, 설정 등 Git이 프로젝트를 관리하는데 필요한 모든 정보가 저장됩니다.</p>
+            </div>
+        </div>
+
+        <h2>Part 3: GitHub에 원격 저장소 만들기</h2>
+        <div class="step">
+            <p>GitHub에 저장소를 만들면 "…or push an existing repository from the command line" 섹션에 몇 가지 명령어가 표시됩니다. 이 명령어를 사용하여 로컬과 원격을 연결합니다.</p>
+
+            <ol>
+                <li><a href="https://github.com/" target="_blank">GitHub</a>에 로그인합니다.</li>
+                <li>오른쪽 상단의 '+' 아이콘을 클릭하고 'New repository'를 선택합니다.</li>
+                <li><strong>Repository name</strong>에 로컬 폴더와 같은 이름(<code>my-first-repo</code>)을 입력합니다.</li>
+                <li>다른 설정(Description, Public/Private)은 자유롭게 선택하되, <strong>"Initialize this repository with a README"는 절대 체크하지 마세요.</strong> 비어있는 저장소를 만들어야 로컬 저장소와 쉽게 연결할 수 있습니다.</li>
+                <li>'Create repository' 버튼을 클릭합니다.</li>
+            </ol>
+        </div>
+        
+        <h2>Part 4: 로컬 저장소와 원격 저장소 연결하기</h2>
+        <div class="step">
+            <p>GitHub에 저장소를 만들면 "…or push an existing repository from the command line" 섹션에 몇 가지 명령어가 표시됩니다. 이 명령어를 사용하여 로컬과 원격을 연결합니다.</p>
+
+            <h3>1. 원격 저장소 주소 추가</h3>
+            <p>내 로컬 저장소에 'origin'이라는 이름으로 GitHub 저장소의 주소를 알려줍니다.</p>
+            <pre><code># 아래 URL은 본인의 GitHub 저장소 URL로 변경해야 합니다.
+git remote add origin https://github.com/YOUR_USERNAME/my-first-repo.git</code></pre>
+            <div class="note">
+                <p><strong>'origin'이란?</strong> 'origin'은 원격 저장소 주소를 가리키는 별명입니다. 다른 이름으로 변경할 수 있지만, 전 세계 개발자들이 관습적으로 'origin'을 사용합니다.</p>
+            </div>
+            
+            <h3>2. 기본 브랜치 이름 변경</h3>
+            <p>요즘은 기본 브랜치 이름으로 'main'을 사용하는 것이 표준입니다.</p>
+            <pre><code>git branch -M main</code></pre>
+
+            <h3>3. 연결 확인</h3>
+            <p>아래 명령어로 원격 저장소가 잘 연결되었는지 확인합니다.</p>
+            <pre><code>git remote -v</code></pre>
+            <p>fetch와 push 주소가 모두 표시되면 성공입니다.</p>
+        </div>
+
+        <h2>Part 5: Push - 내 코드를 GitHub에 올리기</h2>
+        <div class="step">
+            <p>이제 로컬에서 파일을 만들고, 변경 이력을 기록(Commit)한 뒤, GitHub에 올려보겠습니다(Push).</p>
+
+            <h3>1. 파일 생성</h3>
+            <p>Gemini CLI의 <code>write_file</code> 기능을 사용하여 프로젝트에 대한 간단한 소개 파일 <code>README.md</code>를 만듭니다.</p>
+            <pre><code>write_file "README.md" "# My First Repository\n\nThis is my first project managed with Git and Gemini CLI."</code></pre>
+
+            <h3>2. 변경사항 스테이징 (Staging)</h3>
+            <p>Git에게 어떤 파일을 변경 이력에 포함시킬지 알려주는 단계입니다. 장바구니에 물건을 담는 것과 비슷합니다.</p>
+            <pre><code>git add README.md</code></pre>
+
+            <h3>3. 변경사항 커밋 (Commit)</h3>
+            <p>스테이징된 파일들을 하나의 의미있는 변경 단위(스냅샷)로 묶고, 어떤 변경사항인지 메시지를 남깁니다.</p>
+            <pre><code>git commit -m "feat: Create initial README file"</code></pre>
+            <div class="note">
+                <p><strong>커밋 메시지:</strong> <code>-m</code> 뒤에 붙는 메시지는 이 변경사항에 대한 요약입니다. 다른 사람(그리고 미래의 나)이 이해하기 쉽도록 명확하게 작성하는 습관이 중요합니다.</p>
+            </div>
+
+            <h3>4. GitHub에 푸시 (Push)</h3>
+            <p>로컬에 저장된 커밋들을 'origin'이라는 이름의 원격 저장소(GitHub)의 'main' 브랜치로 밀어 올립니다.</p>
+            <pre><code>git push -u origin main</code></pre>
+            <p>이제 GitHub 저장소 페이지를 새로고침 해보세요. 방금 만든 <code>README.md</code> 파일이 보일 겁니다!</p>
+        </div>
+
+        <h2>Part 6: Pull - GitHub의 변경사항을 내 컴퓨터로 가져오기</h2>
+        <div class="step">
+            <p>다른 사람이 코드를 변경했거나, 내가 다른 컴퓨터에서 작업한 내용을 현재 컴퓨터로 가져올 때 사용합니다.</p>
+
+            <h3>1. GitHub에서 파일 직접 수정하기</h3>
+            <p>GitHub 저장소 페이지에서 <code>README.md</code> 파일을 클릭하고, 연필 모양(Edit) 아이콘을 눌러 내용을 수정한 뒤 'Commit changes' 버튼을 눌러 저장합니다.</p>
+
+            <h3>2. 원격 변경사항 가져오기 (Pull)</h3>
+            <p>이제 원격 저장소(GitHub)는 변경되었지만 내 로컬 컴퓨터는 아직 옛날 버전입니다. <code>pull</code> 명령어로 최신 변경사항을 가져옵니다.</p>
+            <pre><code>git pull origin main</code></pre>
+
+            <h3>3. 변경사항 확인</h3>
+            <p>Gemini CLI의 <code>read_file</code> 기능으로 <code>README.md</code> 파일의 내용이 GitHub에서 수정한 대로 바뀌었는지 확인합니다.</p>
+            <pre><code>read_file "README.md"</code></pre>
+            <p>축하합니다! 이제 여러분은 Gemini CLI를 사용하여 GitHub의 가장 핵심적인 기능인 <code>push</code>와 <code>pull</code>을 모두 할 수 있게 되었습니다.</p>
+        </div>
+    </div>
+</body>
+</html>
